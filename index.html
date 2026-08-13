@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Penyusun Menu SPPG</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --tinta:#12211B;
+  --kertas:#EFF2ED;
+  --kartu:#FFFFFF;
+  --hijau:#1E6B4E;
+  --hijau-tua:#14503A;
+  --hijau-muda:#DDE9DF;
+  --baja:#74857D;
+  --garis:#D4DCD5;
+  --amber:#9C5B0B;
+  --amber-muda:#FBF0DC;
+  --merah:#8F2A1D;
+  --merah-muda:#F8E6E2;
+  --r:10px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--kertas);
+  color:var(--tinta);
+  font-family:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  font-size:15px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:'Bricolage Grotesque','IBM Plex Sans',sans-serif;margin:0;line-height:1.15;letter-spacing:-0.015em}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+
+/* ---------- kepala ---------- */
+.kepala{
+  background:var(--hijau-tua);color:#EAF2EC;
+  padding:22px 26px;
+}
+.kepala-isi{max-width:1180px;margin:0 auto;display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;justify-content:space-between}
+.kepala h1{font-size:25px;font-weight:800;color:#fff}
+.kepala p{margin:5px 0 0;font-size:13.5px;color:#A9C6B5;max-width:52ch}
+.lencana{
+  font-size:11px;letter-spacing:.09em;text-transform:uppercase;
+  border:1px solid #46765F;color:#A9C6B5;
+  padding:4px 10px;border-radius:99px;white-space:nowrap;
+}
+
+/* ---------- kerangka ---------- */
+.bungkus{max-width:1180px;margin:0 auto;padding:22px 26px 70px}
+.kerangka{display:grid;grid-template-columns:330px 1fr;gap:24px;align-items:start}
+@media(max-width:920px){.kerangka{grid-template-columns:1fr}}
+
+.panel{
+  background:var(--kartu);border:1px solid var(--garis);border-radius:var(--r);
+  padding:18px;position:sticky;top:20px;
+}
+@media(max-width:920px){.panel{position:static}}
+
+.judul-bagian{
+  font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--baja);font-weight:600;margin:0 0 12px;
+  padding-bottom:7px;border-bottom:1px solid var(--garis);
+}
+.kolom{margin-bottom:14px}
+.kolom label{display:block;font-size:12.5px;font-weight:600;margin-bottom:5px}
+.kolom .bantuan{font-size:11.5px;color:var(--baja);margin-top:4px;line-height:1.4}
+input[type=number],select{
+  width:100%;padding:9px 10px;border:1px solid var(--garis);border-radius:7px;
+  font-family:'IBM Plex Mono',monospace;font-size:14px;background:#fff;color:var(--tinta);
+}
+input[type=number]:focus,select:focus,button:focus-visible,input[type=checkbox]:focus-visible{
+  outline:2.5px solid var(--hijau);outline-offset:2px;
+}
+select{font-family:'IBM Plex Sans',sans-serif}
+
+.grup-bahan{margin-bottom:11px}
+.grup-bahan > .nama-grup{
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:11.5px;font-weight:600;color:var(--baja);margin-bottom:5px;
+}
+.tombol-mini{
+  background:none;border:none;color:var(--hijau);font-size:11.5px;
+  cursor:pointer;padding:2px 4px;font-family:inherit;text-decoration:underline;
+}
+.cek{display:flex;flex-wrap:wrap;gap:5px}
+.cek label{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:12.5px;font-weight:400;margin:0;
+  border:1px solid var(--garis);border-radius:99px;padding:3px 10px 3px 7px;
+  cursor:pointer;background:#fff;user-select:none;
+}
+.cek label:has(input:checked){background:var(--hijau-muda);border-color:#A9C6B5}
+.cek input{accent-color:var(--hijau);margin:0}
+
+.tombol{
+  width:100%;padding:11px;border:none;border-radius:7px;
+  background:var(--hijau);color:#fff;font-family:'Bricolage Grotesque',sans-serif;
+  font-size:15px;font-weight:600;cursor:pointer;
+}
+.tombol:hover{background:var(--hijau-tua)}
+.tombol-lain{background:#fff;color:var(--hijau);border:1px solid var(--hijau);margin-top:8px}
+.tombol-lain:hover{background:var(--hijau-muda)}
+
+/* ---------- ringkasan ---------- */
+.ringkas{
+  background:var(--kartu);border:1px solid var(--garis);border-radius:var(--r);
+  padding:16px 18px;margin-bottom:18px;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;
+}
+.angka .label{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--baja);font-weight:600}
+.angka .nilai{font-family:'IBM Plex Mono',monospace;font-size:21px;font-weight:600;margin-top:2px}
+.angka .sub{font-size:11.5px;color:var(--baja)}
+.nilai.aman{color:var(--hijau)}
+.nilai.awas{color:var(--amber)}
+.nilai.bahaya{color:var(--merah)}
+
+.kabar{
+  border-radius:var(--r);padding:12px 15px;margin-bottom:16px;font-size:13.5px;
+  border:1px solid;
+}
+.kabar.awas{background:var(--amber-muda);border-color:#E3C68B;color:#6B3F06}
+.kabar.bahaya{background:var(--merah-muda);border-color:#E0B0A7;color:#6E2016}
+.kabar strong{display:block;margin-bottom:3px}
+
+/* ---------- nampan ---------- */
+.daftar-hari{display:grid;gap:16px}
+.hari{
+  background:var(--kartu);border:1px solid var(--garis);border-radius:var(--r);
+  overflow:hidden;
+}
+.hari-kepala{
+  display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+  padding:12px 16px;border-bottom:1px solid var(--garis);background:#F8FAF8;
+}
+.hari-kepala h3{font-size:17px;font-weight:600}
+.hari-kepala .biaya{font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:var(--baja)}
+.hari-isi{display:grid;grid-template-columns:1.15fr 1fr;gap:16px;padding:16px}
+@media(max-width:700px){.hari-isi{grid-template-columns:1fr}}
+
+/* nampan sekat — meniru ompreng lima sekat */
+.nampan{
+  display:grid;
+  grid-template-columns:1.5fr 1fr;
+  grid-template-rows:auto auto auto;
+  grid-template-areas:"pokok hewani" "pokok nabati" "sayur buah";
+  gap:5px;background:#C9D3CB;padding:5px;border-radius:12px;
+}
+.sekat{
+  background:#fff;border-radius:8px;padding:9px 11px;min-height:62px;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.sekat.pokok{grid-area:pokok}
+.sekat.hewani{grid-area:hewani}
+.sekat.nabati{grid-area:nabati}
+.sekat.sayur{grid-area:sayur}
+.sekat.buah{grid-area:buah}
+.sekat .peran{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--baja);font-weight:600}
+.sekat .isi{font-size:14.5px;font-weight:600;margin-top:1px;line-height:1.25}
+.sekat .gram{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--hijau);margin-top:2px}
+
+/* gizi */
+.gizi{display:flex;flex-direction:column;gap:11px;justify-content:center}
+.baris-gizi .atas{display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px;margin-bottom:4px}
+.baris-gizi .atas b{font-weight:600}
+.baris-gizi .atas span{font-family:'IBM Plex Mono',monospace;color:var(--baja);font-size:12px}
+.bar{height:7px;background:#E4EAE4;border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--hijau);border-radius:99px}
+.bar i.awas{background:var(--amber)}
+.bar i.bahaya{background:var(--merah)}
+.catatan-hari{
+  grid-column:1/-1;font-size:12px;color:var(--baja);
+  border-top:1px dashed var(--garis);padding-top:9px;margin-top:2px;
+}
+.catatan-hari b{color:var(--tinta);font-weight:600}
+
+/* ---------- tabel belanja ---------- */
+.blok{background:var(--kartu);border:1px solid var(--garis);border-radius:var(--r);padding:18px;margin-top:20px}
+.blok > h2{font-size:19px;font-weight:600;margin-bottom:3px}
+.blok > .ket{font-size:12.5px;color:var(--baja);margin:0 0 14px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--garis)}
+th{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--baja);font-weight:600}
+td.n,th.n{text-align:right;font-family:'IBM Plex Mono',monospace}
+tfoot td{font-weight:600;border-bottom:none;border-top:2px solid var(--tinta)}
+
+.sumber{font-size:11.5px;color:var(--baja);margin-top:14px;line-height:1.6}
+.sumber b{color:var(--tinta)}
+
+.kosong{
+  background:var(--kartu);border:1px dashed var(--garis);border-radius:var(--r);
+  padding:44px 22px;text-align:center;color:var(--baja);
+}
+.kosong h2{font-size:19px;color:var(--tinta);margin-bottom:6px;font-weight:600}
+.kosong p{margin:0;font-size:13.5px;max-width:44ch;margin-inline:auto}
+
+.jejak{
+  margin-top:20px;font-size:12px;color:var(--baja);
+  border-top:1px solid var(--garis);padding-top:12px;
+}
+.jejak summary{cursor:pointer;font-weight:600;color:var(--tinta);font-size:12.5px}
+.jejak ul{margin:9px 0 0;padding-left:18px}
+.jejak li{margin-bottom:3px}
+
+/* ---------- cetak ---------- */
+@media print{
+  @page{margin:14mm}
+  body{background:#fff;font-size:11pt}
+  .kepala{background:#fff;color:#000;border-bottom:2px solid #000;padding:0 0 10px}
+  .kepala h1{color:#000;font-size:18pt}
+  .kepala p,.lencana{color:#444;border-color:#999}
+  .bungkus{padding:12px 0;max-width:none}
+  .kerangka{display:block}
+  .panel,.tombol,.jejak,.kosong{display:none !important}
+  .hari,.blok,.ringkas{border:1px solid #999;break-inside:avoid;page-break-inside:avoid}
+  .nampan{background:#eee}
+  .sekat{border:1px solid #ccc}
+  .blok{margin-top:14px}
+}
+</style>
+</head>
+<body>
+
+<header class="kepala">
+  <div class="kepala-isi">
+    <div>
+      <h1>Penyusun Menu SPPG</h1>
+      <p>Menyusun menu lima hari yang memenuhi kecukupan gizi dalam batas anggaran, lengkap dengan daftar belanjanya.</p>
+    </div>
+    <span class="lencana">Prototipe — GEMASTIK 2026</span>
+  </div>
+</header>
+
+<div class="bungkus">
+  <div class="kerangka">
+
+    <!-- ===== panel parameter ===== -->
+    <aside class="panel">
+      <h2 class="judul-bagian">Ketentuan penyajian</h2>
+
+      <div class="kolom">
+        <label for="jenjang">Penerima manfaat</label>
+        <select id="jenjang"></select>
+      </div>
+
+      <div class="kolom">
+        <label for="porsi">Jumlah porsi per hari</label>
+        <input type="number" id="porsi" value="3000" min="1" step="50">
+      </div>
+
+      <div class="kolom">
+        <label for="anggaran">Anggaran per porsi (Rp)</label>
+        <input type="number" id="anggaran" value="15000" min="1000" step="500">
+      </div>
+
+      <div class="kolom">
+        <label for="persen">Kontribusi gizi satu kali makan (%)</label>
+        <input type="number" id="persen" value="30" min="10" max="60" step="1">
+        <p class="bantuan">Bagian dari kebutuhan harian yang harus dipenuhi oleh satu kali makan. Sesuaikan dengan petunjuk teknis yang berlaku.</p>
+      </div>
+
+      <div class="kolom">
+        <label for="bumbu">Alokasi bumbu, minyak, dan kemasan (%)</label>
+        <input type="number" id="bumbu" value="18" min="0" max="50" step="1">
+        <p class="bantuan">Bagian anggaran yang disisihkan sebelum perhitungan bahan utama.</p>
+      </div>
+
+      <h2 class="judul-bagian" style="margin-top:20px">Bahan yang tersedia</h2>
+      <div id="daftar-bahan"></div>
+
+      <button class="tombol" id="susun">Susun menu</button>
+      <button class="tombol tombol-lain" id="cetak">Cetak atau simpan PDF</button>
+    </aside>
+
+    <!-- ===== hasil ===== -->
+    <main id="hasil">
+      <div class="kosong">
+        <h2>Belum ada menu yang disusun</h2>
+        <p>Tentukan penerima manfaat, jumlah porsi, dan anggaran di sebelah kiri, lalu pilih Susun menu.</p>
+      </div>
+    </main>
+
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script src="mesin-menu.js"></script>
+<script>
+/* =====================================================================
+   ANTARMUKA
+   Berkas ini hanya mengurus tampilan dan interaksi.
+   Seluruh perhitungan menu berada di mesin-menu.js.
+   ===================================================================== */
+
+const $ = id => document.getElementById(id);
+
+const rupiah = n => 'Rp' + Math.round(n).toLocaleString('id-ID');
+const kilo   = g => g >= 1000 ? (g/1000).toFixed(1).replace('.',',') + ' kg'
+                              : Math.round(g) + ' g';
+
+/* --- isi pilihan jenjang --- */
+JENJANG.forEach(j => {
+  const o = document.createElement('option');
+  o.value = j.id;
+  o.textContent = j.nama + ' (' + j.usia + ')';
+  $('jenjang').appendChild(o);
+});
+$('jenjang').value = 'sd13';
+
+/* --- isi daftar bahan --- */
+const grupTampil = ['karbo','hewani','nabati','sayur','buah'];
+const wadahBahan = $('daftar-bahan');
+
+grupTampil.forEach(g => {
+  const blok = document.createElement('div');
+  blok.className = 'grup-bahan';
+
+  const kepala = document.createElement('div');
+  kepala.className = 'nama-grup';
+  kepala.innerHTML = '<span>' + LABEL_GRUP[g] + '</span>';
+
+  const tmb = document.createElement('button');
+  tmb.type = 'button';
+  tmb.className = 'tombol-mini';
+  tmb.textContent = 'Kosongkan';
+  tmb.addEventListener('click', () => {
+    const kotak = blok.querySelectorAll('input');
+    const adaTercentang = [...kotak].some(k => k.checked);
+    kotak.forEach(k => k.checked = !adaTercentang);
+    tmb.textContent = adaTercentang ? 'Pilih semua' : 'Kosongkan';
+  });
+  kepala.appendChild(tmb);
+  blok.appendChild(kepala);
+
+  const kotak = document.createElement('div');
+  kotak.className = 'cek';
+  BAHAN.filter(b => b.grup === g).forEach(b => {
+    const l = document.createElement('label');
+    l.innerHTML = '<input type="checkbox" value="' + b.id + '" checked>' + b.nama;
+    kotak.appendChild(l);
+  });
+  blok.appendChild(kotak);
+  wadahBahan.appendChild(blok);
+});
+
+function bahanTerpilih(){
+  return [...wadahBahan.querySelectorAll('input:checked')].map(k => k.value);
+}
+
+/* --- kelas status berdasarkan pemenuhan --- */
+/* Kekurangan gizi selalu ditandai. Kelebihan hanya ditandai untuk energi,
+   karena porsi yang terlalu besar berdampak pada biaya dan sisa makanan,
+   sedangkan protein di atas target tidak menjadi persoalan. */
+function kelasRasio(r, tandaiLebih){
+  if (r < 0.95) return 'bahaya';
+  if (tandaiLebih && r > 1.20) return 'awas';
+  return '';
+}
+
+function gambarBarisGizi(nama, nilai, target, satuan, tandaiLebih){
+  const rasio = nilai / target;
+  const persen = Math.min(100, rasio * 100);
+  const kelas = kelasRasio(rasio, tandaiLebih);
+  return `
+    <div class="baris-gizi">
+      <div class="atas">
+        <b>${nama}</b>
+        <span>${nilai.toFixed(nama==='Energi'?0:1)} / ${target.toFixed(nama==='Energi'?0:1)} ${satuan} · ${Math.round(rasio*100)}%</span>
+      </div>
+      <div class="bar"><i class="${kelas}" style="width:${persen}%"></i></div>
+    </div>`;
+}
+
+function gambarHari(h){
+  const cari = s => h.komponen.find(k => k.slot === s);
+  const sekat = (slot, kelas) => {
+    const k = cari(slot);
+    return `<div class="sekat ${kelas}">
+      <span class="peran">${LABEL_GRUP[slot]}</span>
+      <span class="isi">${k.bahan.nama}</span>
+      <span class="gram">${k.gram} g mentah</span>
+    </div>`;
+  };
+
+  const catatan = [...h.catatan, ...h.peringatan];
+
+  return `
+  <article class="hari">
+    <div class="hari-kepala">
+      <h3>${h.hari}</h3>
+      <span class="biaya">${rupiah(h.total.biaya)} bahan per porsi</span>
+    </div>
+    <div class="hari-isi">
+      <div class="nampan">
+        ${sekat('karbo','pokok')}
+        ${sekat('hewani','hewani')}
+        ${sekat('nabati','nabati')}
+        ${sekat('sayur','sayur')}
+        ${sekat('buah','buah')}
+      </div>
+      <div class="gizi">
+        ${gambarBarisGizi('Energi',  h.total.kal,  RENCANA.target.kal,  'kkal', true)}
+        ${gambarBarisGizi('Protein', h.total.prot, RENCANA.target.prot, 'g',    false)}
+        <div class="baris-gizi">
+          <div class="atas"><b>Lemak</b><span>${h.total.lemak.toFixed(1)} g</span></div>
+        </div>
+        <div class="baris-gizi">
+          <div class="atas"><b>Karbohidrat</b><span>${h.total.karbo.toFixed(1)} g</span></div>
+        </div>
+      </div>
+      ${catatan.length ? `<p class="catatan-hari"><b>Penyesuaian:</b> ${catatan.join(' ')}</p>` : ''}
+    </div>
+  </article>`;
+}
+
+let RENCANA = null;
+
+function gambarHasil(r){
+  RENCANA = r;
+
+  const rasioBiaya = r.rerataBiayaPorsi / (r.anggaranPorsi * (1 - r.porsiBumbu/100));
+  const kelasBiaya = rasioBiaya > 1 ? 'bahaya' : (rasioBiaya > 0.95 ? 'awas' : 'aman');
+
+  const adaMasalah = r.hari.some(h => h.peringatan.length > 0);
+
+  const kabar = adaMasalah ? `
+    <div class="kabar awas">
+      <strong>Sebagian menu belum memenuhi ketentuan</strong>
+      Sistem sudah menyesuaikan takaran dan mengganti komponen sejauh batas yang wajar, tetapi masih ada hari yang meleset. Naikkan anggaran per porsi, tambah pilihan bahan, atau turunkan target kontribusi gizi.
+    </div>` : '';
+
+  const totalHariTercapai = r.hari.filter(h => h.peringatan.length === 0).length;
+
+  document.getElementById('hasil').innerHTML = `
+    <section class="ringkas">
+      <div class="angka">
+        <div class="label">Biaya bahan per porsi</div>
+        <div class="nilai ${kelasBiaya}">${rupiah(r.rerataBiayaPorsi)}</div>
+        <div class="sub">rata-rata, batas ${rupiah(r.anggaranPorsi * (1 - r.porsiBumbu/100))}</div>
+      </div>
+      <div class="angka">
+        <div class="label">Belanja satu minggu</div>
+        <div class="nilai">${rupiah(r.biayaBahanTotal)}</div>
+        <div class="sub">${r.porsi.toLocaleString('id-ID')} porsi × 5 hari</div>
+      </div>
+      <div class="angka">
+        <div class="label">Target satu kali makan</div>
+        <div class="nilai">${Math.round(r.target.kal)}<span style="font-size:13px"> kkal</span></div>
+        <div class="sub">${r.target.prot.toFixed(1)} g protein · ${r.persenAKG}% AKG</div>
+      </div>
+      <div class="angka">
+        <div class="label">Hari yang memenuhi</div>
+        <div class="nilai ${totalHariTercapai === 5 ? 'aman' : 'awas'}">${totalHariTercapai} / 5</div>
+        <div class="sub">gizi dan anggaran terpenuhi</div>
+      </div>
+    </section>
+
+    ${kabar}
+
+    <div class="daftar-hari">
+      ${r.hari.map(gambarHari).join('')}
+    </div>
+
+    <section class="blok">
+      <h2>Daftar belanja</h2>
+      <p class="ket">Kebutuhan lima hari untuk ${r.porsi.toLocaleString('id-ID')} porsi, sudah dijumlahkan lintas hari. Berat adalah berat kotor sebelum penyiangan.</p>
+      <table>
+        <thead>
+          <tr><th>Bahan</th><th class="n">Berat kotor</th><th class="n">Harga satuan</th><th class="n">Biaya</th></tr>
+        </thead>
+        <tbody>
+          ${r.daftarBelanja.map(x => `
+            <tr>
+              <td>${x.bahan.nama}</td>
+              <td class="n">${kilo(x.gramKotor)}</td>
+              <td class="n">${rupiah(x.bahan.harga)}/kg</td>
+              <td class="n">${rupiah(x.biaya)}</td>
+            </tr>`).join('')}
+        </tbody>
+        <tfoot>
+          <tr><td colspan="3">Total belanja bahan</td><td class="n">${rupiah(r.biayaBahanTotal)}</td></tr>
+        </tfoot>
+      </table>
+
+      <p class="sumber">
+        <b>Sumber nilai gizi:</b> ${SUMBER_TKPI}<br>
+        <b>Sumber acuan kecukupan gizi:</b> ${SUMBER_AKG}<br>
+        <b>Sumber harga bahan:</b> ${SUMBER_HARGA}
+      </p>
+    </section>
+
+    <details class="jejak">
+      <summary>Cara sistem menyusun menu ini</summary>
+      <ul>
+        <li>Target satu kali makan dihitung sebagai ${r.persenAKG}% dari kecukupan harian jenjang ${r.jenjang.nama} (${Math.round(r.jenjang.kal)} kkal, ${r.jenjang.prot} g protein).</li>
+        <li>Anggaran bahan ditetapkan ${rupiah(r.anggaranPorsi * (1 - r.porsiBumbu/100))} per porsi, setelah ${r.porsiBumbu}% disisihkan untuk bumbu, minyak, dan kemasan.</li>
+        <li>Komponen tiap sekat dipilih bergiliran dari bahan yang tersedia agar menu tidak berulang.</li>
+        <li>Takaran awal tiap sekat dihitung dari kepadatan energi bahannya, mengikuti prinsip bahan makanan penukar. Karena itu porsi singkong dan porsi nasi berbeda beratnya tetapi setara energinya.</li>
+        <li>Takaran lalu disesuaikan berulang dalam batas 70% sampai 160% dari perhitungan awal. Bila anggaran masih terlampaui setelah takaran mencapai batas bawah, komponen termahal diganti alternatif yang lebih murah dalam kelompok yang sama.</li>
+        <li>Jumlah putaran penyesuaian per hari: ${r.hari.map(h => h.hari + ' ' + h.iterasi).join(' · ')}.</li>
+        <li>Perhitungan bersifat deterministik. Ketentuan yang sama selalu menghasilkan menu yang sama.</li>
+      </ul>
+    </details>
+  `;
+}
+
+/* --- aksi --- */
+$('susun').addEventListener('click', () => {
+  const terpilih = bahanTerpilih();
+
+  const kurang = grupTampil.filter(g =>
+    !terpilih.some(id => BAHAN.find(b => b.id === id).grup === g)
+  );
+
+  if (kurang.length) {
+    $('hasil').innerHTML = `
+      <div class="kabar bahaya">
+        <strong>Menu belum bisa disusun</strong>
+        Belum ada bahan yang dipilih untuk ${kurang.map(g => LABEL_GRUP[g].toLowerCase()).join(', ')}. Pilih minimal satu bahan pada setiap kelompok.
+      </div>`;
+    return;
+  }
+
+  const hasil = susunRencana({
+    idJenjang:     $('jenjang').value,
+    porsi:         Math.max(1, parseInt($('porsi').value) || 1),
+    anggaranPorsi: Math.max(1000, parseInt($('anggaran').value) || 1000),
+    persenAKG:     Math.min(60, Math.max(10, parseInt($('persen').value) || 30)),
+    porsiBumbu:    Math.min(50, Math.max(0, parseInt($('bumbu').value) || 0)),
+    bahanTersedia: terpilih
+  });
+
+  if (hasil.gagal) {
+    $('hasil').innerHTML = `
+      <div class="kabar bahaya">
+        <strong>Menu belum bisa disusun</strong>${hasil.alasan}
+      </div>`;
+    return;
+  }
+
+  gambarHasil(hasil);
+  document.getElementById('hasil').scrollIntoView({ behavior:'smooth', block:'start' });
+});
+
+$('cetak').addEventListener('click', () => {
+  if (!RENCANA) {
+    alert('Susun menu terlebih dahulu sebelum mencetak.');
+    return;
+  }
+  window.print();
+});
+</script>
+</body>
+</html>
