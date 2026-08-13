@@ -1,39 +1,11 @@
-/* =====================================================================
-   MESIN PENYUSUN MENU
-   ---------------------------------------------------------------------
-   Pendekatan: berbasis aturan (rule-based) dengan penyesuaian iteratif.
-   Bukan optimasi matematis. Alasan pemilihan dijelaskan di Bab 6.4
-   proposal: hasilnya dapat ditelusuri, perilakunya deterministik, dan
-   setiap keputusan sistem dapat dijelaskan kepada pengguna.
-
-   Alur, sesuai urutan di proposal:
-     1. Tentukan target gizi satu kali makan dari AKG jenjang.
-     2. Pilih komponen menu untuk tiap sekat nampan.
-     3. Hitung kandungan gizi dan biaya per porsi.
-     4. Evaluasi terhadap batas gizi dan anggaran.
-     5. Sesuaikan takaran atau ganti komponen, lalu ulangi evaluasi.
-     6. Ulangi untuk lima hari dengan aturan variasi.
-     7. Konsolidasikan kebutuhan bahan menjadi satu daftar belanja.
-
-   Seluruh proses bersifat deterministik: input yang sama selalu
-   menghasilkan menu yang sama. Ini disengaja agar hasil dapat
-   direproduksi dan diverifikasi.
-   ===================================================================== */
 
 const MAKS_ITERASI = 40;
-
-/* Ambang penerimaan. Menu dianggap memenuhi jika berada dalam rentang
-   ini terhadap target. Batas bawah lebih ketat daripada batas atas
-   karena kekurangan gizi lebih merugikan daripada kelebihan wajar. */
 const AMBANG = { bawah: 0.95, atas: 1.20 };
 
 function cariBahan(id) {
   return BAHAN.find(b => b.id === id);
 }
 
-/* Gizi dan biaya satu komponen pada takaran tertentu.
-   Biaya dihitung dari berat kotor (berat bersih dikali faktor susut),
-   karena yang dibeli adalah bahan sebelum penyiangan. */
 function hitungKomponen(bahan, gram) {
   const f = gram / 100;
   return {
@@ -56,17 +28,12 @@ function totalkan(komponen) {
   }), { kal:0, prot:0, lemak:0, karbo:0, biaya:0 });
 }
 
-/* Rotasi komponen antar hari.
-   Bahan dipilih berurutan dari daftar tersedia sehingga tidak ada
-   pengulangan selama stok jenis masih mencukupi. Deterministik. */
 function pilihKomponen(tersedia, grup, indeksHari) {
   const kandidat = tersedia.filter(b => b.grup === grup);
   if (kandidat.length === 0) return null;
   return kandidat[indeksHari % kandidat.length];
 }
 
-/* Alternatif yang lebih murah dalam kelompok yang sama, diurutkan naik.
-   Dipakai saat biaya melewati anggaran. */
 function alternatifLebihMurah(tersedia, bahan) {
   return tersedia
     .filter(b => b.grup === bahan.grup && b.harga < bahan.harga)
@@ -79,18 +46,12 @@ function batasi(nilai, awal, slot) {
   return Math.min(max, Math.max(min, nilai));
 }
 
-/* Takaran awal satu komponen: gram yang diperlukan agar bahan tersebut
-   menyumbang bagian energi yang ditetapkan untuk sekatnya.
-   Inilah penerapan prinsip bahan makanan penukar. */
 function takaranAwalKomponen(bahan, slot, sisaTarget) {
   const targetSlot = sisaTarget * PROPORSI_ENERGI[slot];
   const gram = bahan.kal > 0 ? (targetSlot / bahan.kal) * 100 : BATAS_GRAM[slot].min;
   return Math.min(BATAS_GRAM[slot].max, Math.max(BATAS_GRAM[slot].min, gram));
 }
 
-/* ------------------------------------------------------------------
-   Menyusun menu satu hari.
-   ------------------------------------------------------------------ */
 function susunMenuHari(indeksHari, opsi) {
   const { tersedia, target, pelengkap, anggaranBahan } = opsi;
 
@@ -140,12 +101,6 @@ function susunMenuHari(indeksHari, opsi) {
     const kalLebih   = rasioKal  > AMBANG.atas;
 
     if (!kalKurang && !protKurang && !kalLebih && !lewatAnggaran) break;
-
-    /* Prioritas penyesuaian:
-       1. Biaya lewat     -> turunkan takaran, lalu ganti komponen termahal.
-       2. Protein kurang  -> tambah lauk hewani, lalu lauk nabati.
-       3. Energi kurang   -> tambah makanan pokok.
-       4. Energi berlebih -> kurangi makanan pokok. */
 
     if (lewatAnggaran) {
       const sebelum = { ...gram };
